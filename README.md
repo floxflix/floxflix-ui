@@ -11,6 +11,7 @@ Manage your catalog of movies and TV shows, and give your users a clean, Netflix
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ed?logo=docker&logoColor=white)](#running-with-docker)
+[![ghcr.io](https://img.shields.io/badge/ghcr.io-floxflix%2Ffloxflix--ui-2496ed?logo=github&logoColor=white)](https://github.com/orgs/floxflix/packages/container/package/floxflix-ui)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 </div>
@@ -51,13 +52,58 @@ Manage your catalog of movies and TV shows, and give your users a clean, Netflix
 
 ### Running with Docker
 
+Prebuilt multi-arch images (`linux/amd64`, `linux/arm64`) are published to the GitHub Container Registry on every release:
+
+```bash
+docker pull ghcr.io/floxflix/floxflix-ui:latest
+```
+
+Run it, pointing the container at your FloxFlix API through environment variables:
+
+```bash
+docker run -d --name floxflix-ui -p 8080:80 \
+  -e VITE_STREAMAPI_URL=http://localhost:5000 \
+  -e VITE_STREAMAPI_PREFIX=/v1/api \
+  -e VITE_STREAMAPI_PREFIX_ADMIN=/dashboard \
+  -e VITE_DEFAULT_NEXT_EPISODE_OFFSET=15 \
+  ghcr.io/floxflix/floxflix-ui:latest
+```
+
+The UI is then served at `http://localhost:8080`.
+
+**Image tags**
+
+| Tag          | Meaning                                            |
+| ------------ | -------------------------------------------------- |
+| `latest`     | Most recent release                                |
+| `1.2.3`      | Exact release version                              |
+| `1.2`        | Latest patch of that minor release                 |
+
+> The package is public, so no `docker login` is required to pull. If a pull
+> fails with `unauthorized`, check that the package visibility is set to public
+> in the [package settings](https://github.com/orgs/floxflix/packages/container/floxflix-ui/settings).
+
+### Building the image locally
+
 ```bash
 docker compose up --build
 ```
 
-The multi-stage build produces the Vite bundle on `node:22-alpine` and serves the static output with `nginx:alpine` on port `80` (mapped to `5173` by Compose). The nginx config falls back to `index.html` so client-side routes survive a refresh.
+The multi-stage build produces the Vite bundle on `node:26-alpine` and serves the static output with `nginx:alpine` on port `80`. The nginx config falls back to `index.html` so client-side routes survive a refresh.
 
-Make sure `.env.production` points at a reachable FloxFlix API **before** building — values are inlined into the bundle at build time.
+To build and run the same image outside Compose:
+
+```bash
+docker build -t floxflix-ui:local -f dockerfile .
+docker run -d -p 8080:80 \
+  -e VITE_STREAMAPI_URL=http://localhost:5000 \
+  floxflix-ui:local
+```
+
+Container configuration is applied at **runtime** by `docker-entrypoint.sh`, which
+writes `config.js` from the environment variables before nginx starts. This means a
+single image works across environments without rebuilding. Values baked into the
+bundle at build time (from `.env.production`) are only a fallback.
 
 ### Running locally (development)
 
@@ -73,7 +119,12 @@ The dev server listens on `http://localhost:5173` and binds to `0.0.0.0`, so it 
 
 ## Configuration
 
-Environment variables are read at build time via Vite. Copy `.env.example` to `.env.local` and adjust:
+Configuration is resolved at runtime, with build-time values as a fallback:
+
+- **Docker / Kubernetes** — set the variables below as environment variables on the
+  container. `docker-entrypoint.sh` regenerates `config.js` on every start.
+- **Local development** — copy `.env.example` to `.env.local`; Vite inlines these at
+  build time.
 
 | Variable                            | Default                  | Description                                         |
 | ----------------------------------- | ------------------------ | --------------------------------------------------- |
@@ -107,6 +158,7 @@ src/
   main.tsx           Entry point
 config/default.conf  nginx config used in the production image
 dockerfile           Multi-stage build (node build → nginx serve)
+docker-entrypoint.sh Generates config.js from runtime env vars at container start
 ```
 
 ## Available scripts
@@ -132,6 +184,17 @@ dockerfile           Multi-stage build (node build → nginx serve)
 This UI does not work without a FloxFlix API. See the [FloxFlix README](https://github.com/elvis-segovia/floxflix) for instructions on running the API, MongoDB and the FFmpeg-backed conversion worker.
 
 The CORS origin on the API must include the URL where this UI is served (defaults to `http://localhost:5173`).
+
+## Releases
+
+Pushing a `v*.*.*` tag triggers [`.github/workflows/release.yml`](.github/workflows/release.yml), which:
+
+1. Builds multi-arch images (`linux/amd64`, `linux/arm64`).
+2. Pushes them to `ghcr.io/floxflix/floxflix-ui` with `latest`, `MAJOR.MINOR` and
+   `MAJOR.MINOR.PATCH` tags.
+3. Creates a GitHub release with generated notes.
+
+You can also run it manually from the Actions tab by providing an existing tag.
 
 ## Contributing
 

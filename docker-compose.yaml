@@ -1,6 +1,14 @@
 services:
   ui:
-    build: .
+    image: ghcr.io/floxflix/floxflix-ui:latest
+    build:
+      context: .
+      dockerfile: dockerfile
     ports:
-      - "5173:5173"
+      - "5173:80"
+    environment:
+      VITE_STREAMAPI_URL: ${VITE_STREAMAPI_URL:-http://localhost:5000}
+      VITE_STREAMAPI_PREFIX: ${VITE_STREAMAPI_PREFIX:-/v1/api}
+      VITE_STREAMAPI_PREFIX_ADMIN: ${VITE_STREAMAPI_PREFIX_ADMIN:-/dashboard}
+      VITE_DEFAULT_NEXT_EPISODE_OFFSET: ${VITE_DEFAULT_NEXT_EPISODE_OFFSET:-15}
     restart: unless-stopped
