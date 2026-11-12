@@ -23,7 +23,7 @@ export const Web: React.FC = () => {
         <ConfigProvider theme={{
             algorithm: theme.darkAlgorithm,
             token: {
-                colorPrimary: '#e8611a',
+                colorPrimary: '#09c3c2',
                 colorBgLayout: '#141414',
                 colorBgContainer: '#1a1a1a',
                 colorText: '#e5e5e5',

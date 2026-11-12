@@ -144,7 +144,7 @@ export const MainMenu: React.FC<MainMenuProps> = ({ menuItems }) => {
                             <div className="user-dropdown">
                                 <Avatar
                                     style={{
-                                        backgroundColor: '#e8611a',
+                                        backgroundColor: '#077f7e',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center'

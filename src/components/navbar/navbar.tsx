@@ -78,12 +78,12 @@ export const WebNavbar: React.FC<NavbarProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                     {logo || (
                         <span style={{
-                            color: '#e8611a',
+                            color: '#09c3c2',
                             fontSize: '1.6rem',
                             fontWeight: 800,
                             letterSpacing: '-0.5px',
                             marginRight: 40,
-                            textShadow: '0 0 20px rgba(232, 97, 26, 0.3)',
+                            textShadow: '0 0 20px rgba(9, 195, 194, 0.35)',
                         }}>
                             {APP_NAME}
                         </span>
@@ -113,7 +113,7 @@ export const WebNavbar: React.FC<NavbarProps> = ({
                     >
                         <Space style={{ cursor: 'pointer', color: 'white', marginLeft: 8 }}>
                             <Avatar
-                                style={{ backgroundColor: '#e8611a' }}
+                                style={{ backgroundColor: '#077f7e' }}
                                 icon={<UserOutlined />}
                                 size={32}
                             />

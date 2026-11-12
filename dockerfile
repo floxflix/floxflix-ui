@@ -1,6 +1,6 @@
 ARG PLATFORM=linux/amd64
 
-FROM --platform=$PLATFORM node:24.4.1-alpine AS build
+FROM --platform=$PLATFORM node:26-alpine AS build
 WORKDIR /app
 COPY package.json .
 COPY package-lock.json .

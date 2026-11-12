@@ -435,8 +435,8 @@ body {
 }
 
 .stream-card-badge {
-  background: rgba(232, 97, 26, 0.2);
-  color: #e8611a;
+  background: rgba(9, 195, 194, 0.16);
+  color: #09c3c2;
   padding: 1px 6px;
   border-radius: 3px;
   font-size: 0.7rem;
@@ -555,7 +555,7 @@ body {
 
 .stream-season-tab.active {
   color: #fff;
-  border-bottom-color: #e8611a;
+  border-bottom-color: #09c3c2;
 }
 
 /* Episodes Grid */
@@ -581,7 +581,7 @@ body {
 }
 
 .stream-episode-card-active {
-  outline: 2px solid #e8611a;
+  outline: 2px solid #09c3c2;
   outline-offset: -2px;
 }
 

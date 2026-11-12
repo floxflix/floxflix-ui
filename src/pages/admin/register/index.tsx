@@ -72,8 +72,8 @@ const RegisterContent: React.FC<any> = ({ screens, form, mode, toggleTheme, onFi
         <Layout style={{
             minHeight: '100vh',
             background: mode === 'dark'
-                ? 'linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%)'
-                : 'linear-gradient(135deg, #fff5f0 0%, #fef3e7 50%, #f5f5f7 100%)',
+                ? 'linear-gradient(135deg, #081212 0%, #0e1f1f 50%, #0b2b2a 100%)'
+                : 'linear-gradient(135deg, #eefbfa 0%, #e6f7f6 50%, #f4f8f8 100%)',
         }}>
             <Button
                 type="text"
@@ -108,8 +108,8 @@ const RegisterContent: React.FC<any> = ({ screens, form, mode, toggleTheme, onFi
                     backgroundColor: token.colorBgContainer,
                     boxShadow: mode === 'dark'
                         ? '0 8px 32px rgba(0, 0, 0, 0.4)'
-                        : '0 8px 32px rgba(232, 97, 26, 0.08)',
-                    border: mode === 'dark' ? '1px solid #2d2d44' : 'none',
+                        : '0 8px 32px rgba(9, 195, 194, 0.10)',
+                    border: mode === 'dark' ? '1px solid #1f3636' : 'none',
                 }}
                     title={
                         <div style={{ textAlign: "center" }}>
