@@ -1,16 +1,12 @@
-ARG PLATFORM=linux/amd64
-
-FROM --platform=$PLATFORM node:26-alpine AS build
+FROM --platform=$BUILDPLATFORM node:26-alpine AS build
 WORKDIR /app
-COPY package.json .
-COPY package-lock.json .
-RUN npm install
+COPY package.json package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm npm ci
 COPY . .
-COPY .env.production .env
 RUN npm run build
 
-# copy the build output to the nginx server
-FROM --platform=$PLATFORM nginx:alpine
+
+FROM nginx:alpine AS runtime
 RUN apk update
 WORKDIR /etc/nginx/conf.d
 COPY --from=0 /app/config/default.conf /etc/nginx/conf.d/default.conf
