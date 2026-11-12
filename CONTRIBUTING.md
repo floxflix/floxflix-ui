@@ -1,6 +1,6 @@
-# Contributing to flixflox-ui
+# Contributing to floxflix-ui
 
-Thanks for your interest in contributing! This repository contains the admin dashboard and web client for [FlixFlox](https://github.com/elvis-segovia/flixflox), the self-hosted video streaming API. Contributions of all kinds are welcome: bug reports, feature ideas, documentation fixes, translations and code.
+Thanks for your interest in contributing! This repository contains the admin dashboard and web client for [FloxFlix](https://github.com/elvis-segovia/floxflix), the self-hosted video streaming API. Contributions of all kinds are welcome: bug reports, feature ideas, documentation fixes, translations and code.
 
 ## Ways to contribute
 
@@ -9,20 +9,20 @@ Thanks for your interest in contributing! This repository contains the admin das
 - **Improve the docs** — README fixes, setup guides and screenshots are always appreciated.
 - **Pick up an issue** — issues labeled [`good first issue`](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [`help wanted`](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) are a great place to start. Comment on the issue so we don't duplicate work.
 
-If your change affects the API (endpoints, auth, streaming), it probably belongs in the [FlixFlox backend repo](https://github.com/elvis-segovia/flixflox) instead — feel free to open an issue there.
+If your change affects the API (endpoints, auth, streaming), it probably belongs in the [FloxFlix backend repo](https://github.com/elvis-segovia/floxflix) instead — feel free to open an issue there.
 
 ## Development setup
 
 ### Prerequisites
 
 - Node.js 22+
-- A running [FlixFlox API](https://github.com/elvis-segovia/flixflox) instance (this UI is a thin client and does not work without it). Make sure the API's CORS origin includes `http://localhost:5173`.
+- A running [FloxFlix API](https://github.com/elvis-segovia/floxflix) instance (this UI is a thin client and does not work without it). Make sure the API's CORS origin includes `http://localhost:5173`.
 
 ### Getting started
 
 ```bash
-git clone https://github.com/elvis-segovia/flixflox-ui.git
-cd flixflox-ui
+git clone https://github.com/elvis-segovia/floxflix-ui.git
+cd floxflix-ui
 cp .env.example .env.local   # point VITE_STREAMAPI_URL at your API
 npm install
 npm run dev

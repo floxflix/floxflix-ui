@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report a bug! If the problem is in the API (auth, streaming, conversion), please report it in the [FlixFlox backend repo](https://github.com/elvis-segovia/flixflox/issues) instead.
+        Thanks for taking the time to report a bug! If the problem is in the API (auth, streaming, conversion), please report it in the [FloxFlix backend repo](https://github.com/elvis-segovia/floxflix/issues) instead.
   - type: textarea
     id: what-happened
     attributes:

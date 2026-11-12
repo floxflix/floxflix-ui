@@ -1,6 +1,6 @@
 import type { ThemeConfig } from 'antd';
 
-// Colors derived from the flixflox.png logo (orange-to-coral gradient)
+// Colors derived from the floxflix.png logo (orange-to-coral gradient)
 const brandColors = {
     primary: '#e8611a',       // Main orange from logo
     primaryHover: '#f57c3a',  // Lighter orange

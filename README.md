@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🎬 FlixFlox UI
+# 🎬 FloxFlix UI
 
-**Admin dashboard and web client for [FlixFlox](https://github.com/elvis-segovia/flixflox) — the self-hosted video streaming platform.**
+**Admin dashboard and web client for [FloxFlix](https://github.com/elvis-segovia/floxflix) — the self-hosted video streaming platform.**
 
 Manage your catalog of movies and TV shows, and give your users a clean, Netflix-style viewing experience with HLS playback. Your media, your server, your rules.
 
@@ -42,12 +42,12 @@ Manage your catalog of movies and TV shows, and give your users a clean, Netflix
 - 🎞️ Full catalog management: movies and TV shows (add / edit / list)
 - 🗂️ Categories and cast management
 - 👥 User administration
-- 🔐 JWT cookie authentication backed by the FlixFlox API
+- 🔐 JWT cookie authentication backed by the FloxFlix API
 - 🌗 Ant Design 5 theming
 
 ## Quick start
 
-> **Note:** this UI is a thin client for the [FlixFlox API](https://github.com/elvis-segovia/flixflox) — you need a running API instance first (see [Backend dependency](#backend-dependency)).
+> **Note:** this UI is a thin client for the [FloxFlix API](https://github.com/elvis-segovia/floxflix) — you need a running API instance first (see [Backend dependency](#backend-dependency)).
 
 ### Running with Docker
 
@@ -57,11 +57,11 @@ docker compose up --build
 
 The multi-stage build produces the Vite bundle on `node:22-alpine` and serves the static output with `nginx:alpine` on port `80` (mapped to `5173` by Compose). The nginx config falls back to `index.html` so client-side routes survive a refresh.
 
-Make sure `.env.production` points at a reachable FlixFlox API **before** building — values are inlined into the bundle at build time.
+Make sure `.env.production` points at a reachable FloxFlix API **before** building — values are inlined into the bundle at build time.
 
 ### Running locally (development)
 
-Prerequisites: Node.js 22+, a running FlixFlox API instance.
+Prerequisites: Node.js 22+, a running FloxFlix API instance.
 
 ```bash
 cp .env.example .env.local
@@ -77,8 +77,8 @@ Environment variables are read at build time via Vite. Copy `.env.example` to `.
 
 | Variable                            | Default                  | Description                                         |
 | ----------------------------------- | ------------------------ | --------------------------------------------------- |
-| `VITE_STREAMAPI_URL`                | `http://localhost:5000`  | Base URL of the FlixFlox API                        |
-| `VITE_STREAMAPI_PREFIX`             | `/v1/api`                | Public API prefix (matches FlixFlox routing)        |
+| `VITE_STREAMAPI_URL`                | `http://localhost:5000`  | Base URL of the FloxFlix API                        |
+| `VITE_STREAMAPI_PREFIX`             | `/v1/api`                | Public API prefix (matches FloxFlix routing)        |
 | `VITE_STREAMAPI_PREFIX_ADMIN`       | `/dashboard`             | Path prefix for the admin dashboard routes          |
 | `VITE_DEFAULT_NEXT_EPISODE_OFFSET`  | `15`                     | Seconds before episode end to surface "next episode"|
 
@@ -129,7 +129,7 @@ dockerfile           Multi-stage build (node build → nginx serve)
 
 ## Backend dependency
 
-This UI does not work without a FlixFlox API. See the [FlixFlox README](https://github.com/elvis-segovia/flixflox) for instructions on running the API, MongoDB and the FFmpeg-backed conversion worker.
+This UI does not work without a FloxFlix API. See the [FloxFlix README](https://github.com/elvis-segovia/floxflix) for instructions on running the API, MongoDB and the FFmpeg-backed conversion worker.
 
 The CORS origin on the API must include the URL where this UI is served (defaults to `http://localhost:5173`).
 

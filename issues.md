@@ -1,4 +1,4 @@
-# Draft issues — flixflox-ui
+# Draft issues — floxflix-ui
 
 Ready to paste into GitHub. Bugs follow `.github/ISSUE_TEMPLATE/bug_report.yml`, features follow `feature_request.yml`.
 Line references are against `f360920`.

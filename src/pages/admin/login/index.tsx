@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, Button, Layout, Grid, theme, Typography, Card, Space, notification, ConfigProvider } from 'antd';
 import { Link } from 'react-router-dom';
-import FlixFlox from '../../../assets/flixflox.png';
+import FloxFlix from '../../../assets/floxflix.png';
 import { Content } from 'antd/es/layout/layout';
 import { useAuth } from '../../../components/authentication/authProvider';
 import { useTheme } from '../../../components/theme/themeProvider';
@@ -114,7 +114,7 @@ const LoginContent: React.FC<any> = ({ screens, form, mode, toggleTheme, handleA
                 }}
                     title={
                         <div style={{ textAlign: "center" }}>
-                            <img src={FlixFlox} alt="logo" style={{ height: 80 }} />
+                            <img src={FloxFlix} alt="logo" style={{ height: 80 }} />
                             <div style={{ marginBottom: `${token.padding}px` }}>
                                 <Text type="secondary">Login to your account</Text>
                             </div>

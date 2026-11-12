@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, Button, Layout, Grid, theme, Typography, Card, Select, notification, ConfigProvider } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import FlixFlox from '../../../assets/flixflox.png';
+import FloxFlix from '../../../assets/floxflix.png';
 import { Content } from 'antd/es/layout/layout';
 import { useTheme } from '../../../components/theme/themeProvider';
 import { lightTheme, darkTheme } from '../../../components/theme/themeConfig';
@@ -113,7 +113,7 @@ const RegisterContent: React.FC<any> = ({ screens, form, mode, toggleTheme, onFi
                 }}
                     title={
                         <div style={{ textAlign: "center" }}>
-                            <img src={FlixFlox} alt="logo" style={{ height: 80 }} />
+                            <img src={FloxFlix} alt="logo" style={{ height: 80 }} />
                             <div style={{ marginBottom: `${token.padding}px` }}>
                                 <Text type="secondary">Create your account</Text>
                             </div>

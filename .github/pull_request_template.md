@@ -19,4 +19,4 @@ Fixes #<!-- issue number, if any -->
 
 - [ ] `npm run lint` passes with no warnings
 - [ ] `npm run build` succeeds
-- [ ] I tested the affected screens against a running FlixFlox API
+- [ ] I tested the affected screens against a running FloxFlix API

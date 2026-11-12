@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for the suggestion! If the feature needs API changes (new endpoints, data model), consider also opening an issue in the [FlixFlox backend repo](https://github.com/elvis-segovia/flixflox/issues).
+        Thanks for the suggestion! If the feature needs API changes (new endpoints, data model), consider also opening an issue in the [FloxFlix backend repo](https://github.com/elvis-segovia/floxflix/issues).
   - type: textarea
     id: problem
     attributes:
