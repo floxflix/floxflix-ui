@@ -22,6 +22,9 @@
     "video.js": "^8.21.0",
     "videojs-playlist": "^5.2.0"
   },
+  "overrides": {
+    "minimatch": "11.0.8"
+  },
   "devDependencies": {
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
@@ -33,5 +36,8 @@
     "eslint-plugin-react-refresh": "^0.4.7",
     "typescript": "^5.2.2",
     "vite": "^8.0.16"
+  },
+  "allowScripts": {
+    "fsevents@2.3.3": true
   }
 }
