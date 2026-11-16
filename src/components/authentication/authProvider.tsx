@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useState, useEffect, useCallback } from "react";
 import { LoginController } from "../../controllers";
+import { SESSION_EXPIRED_EVENT } from "../../controllers/apiClient";
 import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
@@ -46,27 +47,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setIsLoading(true);
         setError(null);
         try {
-            const res = await loginCtrl.checkAuth().catch((err: unknown) => {
-                console.error('Auth check failed:', err);
-                return null;
-            });
+            const res = await loginCtrl.checkAuth();
 
             if (res?.status === 200) {
                 applySession(res.data.user);
-                return;
-            }
-
-            // The check failed: exactly one refresh attempt, then give up.
-            const refreshRes = await loginCtrl.refreshToken().catch((err: unknown) => {
-                console.error('Token refresh failed:', err);
-                return null;
-            });
-
-            if (refreshRes?.status === 200) {
-                applySession(refreshRes.data);
             } else {
                 clearSession('Authentication check failed');
             }
+        } catch (err) {
+            console.error('Auth check failed:', err);
+            clearSession('Authentication check failed');
         } finally {
             setIsLoading(false);
         }
@@ -76,15 +66,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         checkAuthentication();
     }, [checkAuthentication]);
 
+    useEffect(() => {
+        const onSessionExpired = () => {
+            clearSession('Your session has expired. Please sign in again.');
+        };
+        window.addEventListener(SESSION_EXPIRED_EVENT, onSessionExpired);
+        return () => window.removeEventListener(SESSION_EXPIRED_EVENT, onSessionExpired);
+    }, [clearSession]);
+
     const login = async (username: string, password: string, role: string = 'viewer'): Promise<void> => {
         try {
             setIsLoading(true);
             setError(null);
             const res = await loginCtrl.login(username, password, role);
             if (res.status === 200) {
-                applySession({ username: res.data.username, role });
+                const actualRole = res.data.role || role;
+                applySession({ username: res.data.username, role: actualRole });
                 // Navigate based on role
-                if (role === 'admin') {
+                if (actualRole === 'admin') {
                     navigate("/dashboard/home");
                 } else {
                     navigate("/");
@@ -100,20 +99,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     const logout = async (): Promise<void> => {
+        setIsLoading(true);
+        setError(null);
         try {
-            setIsLoading(true);
-            setError(null);
-            const res = await loginCtrl.logout();
-            if (res.status === 200) {
-                clearSession();
-                navigate("/");
-            }
+            await loginCtrl.logout();
         } catch (err) {
             console.error('Logout failed:', err);
-            setError('Logout failed. Please try again.');
-            throw err;
         } finally {
+            clearSession();
             setIsLoading(false);
+            navigate("/login");
         }
     };
 

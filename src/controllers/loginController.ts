@@ -1,114 +1,39 @@
-import axios from "axios";
-import { env } from "../env";
+import { AxiosInstance } from "axios";
+import { createApiClient } from "./apiClient";
 
 export class LoginController {
-    api_url: string | undefined;
+    api: AxiosInstance;
 
     constructor() {
-        this.api_url = `${env.VITE_STREAMAPI_URL}${env.VITE_STREAMAPI_PREFIX}`;
-    }
-
-    // Save token to localStorage
-    private saveToken(token: string): void {
-        localStorage.setItem('authToken', token);
-    }
-
-    // Get token from localStorage
-    private getToken(): string | null {
-        return localStorage.getItem('authToken');
-    }
-
-    // Remove token from localStorage
-    private removeToken(): void {
-        localStorage.removeItem('authToken');
+        this.api = createApiClient();
     }
 
     async login(username: string, password: string, role: string = 'viewer'): Promise<any> {
-        const response = await axios.post(`${this.api_url}/auth/login`, {
+        return await this.api.post('/auth/login', {
             username,
             password,
             role
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
         });
-
-        // Save token if it exists in the response
-        if (response.data && response.data.access_token) {
-            this.saveToken(response.data.access_token);
-        }
-
-        return response;
     }
 
     async register(username: string, password: string, email: string, role: string = 'viewer'): Promise<any> {
-        return await axios.post(`${this.api_url}/auth/register`, {
+        return await this.api.post('/auth/register', {
             username,
             password,
             role,
             email
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
         });
     }
 
     async checkAuth(): Promise<any> {
-        const token = this.getToken();
-        const headers: any = {
-            'Content-Type': 'application/json'
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
-        return await axios.get(`${this.api_url}/auth/check`, {
-            headers
-        });
+        return await this.api.get('/auth/check');
     }
 
     async refreshToken(): Promise<any> {
-        const token = this.getToken();
-        const headers: any = {
-            'Content-Type': 'application/json'
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
-        const response = await axios.post(`${this.api_url}/auth/token/refresh`, {}, {
-            headers
-        });
-
-        // Save new token if it exists in the response
-        if (response.data && response.data.access_token) {
-            this.saveToken(response.data.access_token);
-        }
-
-        return response;
+        return await this.api.post('/auth/token/refresh');
     }
 
     async logout(): Promise<any> {
-        const token = this.getToken();
-        const headers: any = {
-            'Content-Type': 'application/json'
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
-        const response = await axios.delete(`${this.api_url}/auth/logout`, {
-            headers
-        });
-
-        // Remove token from localStorage on logout
-        this.removeToken();
-
-        return response;
+        return await this.api.delete('/auth/logout');
     }
 }
