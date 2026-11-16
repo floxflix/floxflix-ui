@@ -25,8 +25,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ id = "0", video, title
     const playerRef = useRef<any>(null);
     const skipButtonRef = useRef<HTMLButtonElement | null>(null);
     const nextButtonRef = useRef<HTMLButtonElement | null>(null);
+    const isLastItemRef = useRef(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    
+
     const navigate = useNavigate();
     const { id: showId, season } = useParams();
 
@@ -49,7 +50,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ id = "0", video, title
     };
 
     let lastTap = 0;
-    
+
     useEffect(() => {
         if (playerRef.current) {
             const currentItem = playerRef.current.playlist().findIndex((x: { id: Number; }) => Number(x.id) === Number(id));
@@ -127,12 +128,13 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ id = "0", video, title
             playerRef.current.playlist.currentItem(currentVideo);
 
             playerRef.current.on('playlistitem', function (_event: any, playlistItem: any, _index: number) {
-                skipIntroDisplayMessage = playlistItem.skip_intro_display_message
+                isLastItemRef.current = playerRef.current.playlist.currentIndex() === playerRef.current.playlist.lastIndex();
+
+                skipIntroDisplayMessage = playlistItem.skip_intro_display_message;
                 introStartTimeSeconds = timeToSeconds(playlistItem.intro_start_time);
                 introEndTimeSeconds = timeToSeconds(playlistItem.intro_end_time);
                 nextEpisodeOffset = timeToSeconds(playlistItem.next_episode_time);
 
-                // Actualiza /web/play/:id/season/:season/episode/:episode
                 syncEpisodeUrl(playlistItem.id);
             });
 
@@ -146,8 +148,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ id = "0", video, title
 
             playerRef.current.on('timeupdate', function () {
                 const currentTime = playerRef.current.currentTime();
-                const nextEpisodeDelay = Math.floor(playerRef.current.duration()) - nextEpisodeOffset;
-
                 // Handle Skip Intro button
                 if (currentTime >= introStartTimeSeconds && currentTime <= introEndTimeSeconds) {
                     if (!skipButtonRef.current) {
@@ -163,7 +163,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ id = "0", video, title
                 }
 
                 // Handle Next Episode button
-                if (Math.floor(currentTime) === nextEpisodeDelay) {
+                if (!isLastItemRef.current && Math.floor(currentTime) === nextEpisodeOffset && nextEpisodeOffset > 0) {
                     if (!nextButtonRef.current) {
                         const nextButton = createButton('Next Episode', () => {
                             playerRef.current.playlist.next();
@@ -182,7 +182,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ id = "0", video, title
                     skipButtonRef.current = null;
                 }
 
-                if (nextButtonRef.current && (currentTime <= nextEpisodeDelay || currentTime >= playerRef.current.duration())) {
+                if (nextButtonRef.current && (currentTime <= nextEpisodeOffset || currentTime >= playerRef.current.duration())) {
                     playerRef.current.el().removeChild(nextButtonRef.current);
                     nextButtonRef.current = null;
                 }
@@ -209,8 +209,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ id = "0", video, title
             });
 
             playerRef.current.on('ended', function () {
-                // La URL se sincroniza en el handler de 'playlistitem'
-                playerRef.current.playlist.next();
+                if (!isLastItemRef.current) {
+                    playerRef.current.playlist.next();
+                }
             })
         }
 
