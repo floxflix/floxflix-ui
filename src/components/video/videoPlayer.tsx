@@ -3,6 +3,7 @@ import 'video.js/dist/video-js.css';
 import 'videojs-playlist';
 import React, { useEffect, useRef, useState } from "react";
 import { env } from "../../env";
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface VideoPlayerProps {
     id: string;
@@ -25,12 +26,36 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ id = "0", video, title
     const skipButtonRef = useRef<HTMLButtonElement | null>(null);
     const nextButtonRef = useRef<HTMLButtonElement | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    let lastTap = 0;
+    
+    const navigate = useNavigate();
+    const { id: showId, season } = useParams();
 
+    const episodeParamRef = useRef<string>(String(id));
+    episodeParamRef.current = String(id);
+
+    const syncEpisodeUrl = (episodeId: string | number) => {
+        if (!season || episodeId === undefined || episodeId === null) {
+            return;
+        }
+
+        const target = String(episodeId);
+
+        if (target === episodeParamRef.current) {
+            return;
+        }
+
+        episodeParamRef.current = target;
+        navigate(`/web/play/${showId}/season/${season}/episode/${target}`, { replace: true });
+    };
+
+    let lastTap = 0;
+    
     useEffect(() => {
         if (playerRef.current) {
             const currentItem = playerRef.current.playlist().findIndex((x: { id: Number; }) => Number(x.id) === Number(id));
-            playerRef.current.playlist.currentItem(currentItem);
+            if (currentItem >= 0) {
+                playerRef.current.playlist.currentItem(currentItem);
+            }
         }
     }, [id])
 
@@ -106,6 +131,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ id = "0", video, title
                 introStartTimeSeconds = timeToSeconds(playlistItem.intro_start_time);
                 introEndTimeSeconds = timeToSeconds(playlistItem.intro_end_time);
                 nextEpisodeOffset = timeToSeconds(playlistItem.next_episode_time);
+
+                // Actualiza /web/play/:id/season/:season/episode/:episode
+                syncEpisodeUrl(playlistItem.id);
             });
 
             const createButton = (text: string, onClick: () => void) => {
@@ -181,9 +209,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ id = "0", video, title
             });
 
             playerRef.current.on('ended', function () {
-                if (playlist.length > 0) {
-                    playerRef.current.playlist.next()
-                }
+                // La URL se sincroniza en el handler de 'playlistitem'
+                playerRef.current.playlist.next();
             })
         }
 
